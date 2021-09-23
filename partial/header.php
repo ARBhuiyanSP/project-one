@@ -1,3 +1,16 @@
+<?php
+session_start();
+include_once 'partial/class.user.php';
+$user = new User(); $uid = $_SESSION['uid'];
+if (!$user->get_session()){
+ header("location:index.php");
+}
+
+if (isset($_GET['q'])){
+ $user->user_logout();
+ header("location:index.php");
+ }
+ ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -39,7 +52,7 @@
 		</a>	
 	</div>  
     <!-- Header Navbar -->
-    <nav class="navbar navbar-static-top">
+    <nav class="navbar navbar-static-top" style="background:#0C1A32;">
       <!-- Sidebar toggle button-->
 	  <div class="app-menu">
 		<ul class="header-megamenu nav">
@@ -73,7 +86,7 @@
               <li class="user-body">
 				 <a class="dropdown-item" href="#"><i class="ti-user text-muted mr-2"></i> Profile</a>
 				 <div class="dropdown-divider"></div>
-				 <a class="dropdown-item" href="#"><i class="ti-lock text-muted mr-2"></i> Logout</a>
+				 <a class="dropdown-item" href="dashboard.php?q=logout"><i class="ti-lock text-muted mr-2"></i> Logout</a>
               </li>
             </ul>
           </li>	
@@ -130,7 +143,7 @@
     </section>
 	<div class="sidebar-footer">
 		<a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Settings" aria-describedby="tooltip92529"><span class="icon-Settings-2"></span></a>
-		<a href="mailbox.html" class="link" data-toggle="tooltip" title="" data-original-title="Email"><span class="icon-Mail"></span></a>
+		<a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Email"><span class="icon-Mail"></span></a>
 		<a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Logout"><span class="icon-Lock-overturning"><span class="path1"></span><span class="path2"></span></span></a>
 	</div>
   </aside>

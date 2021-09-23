@@ -1,3 +1,8 @@
+<?php
+session_start();
+	include_once 'partial/class.user.php';
+	$user = new User();
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
     <meta name="author" content="">
     <link rel="icon" href="images/favicon.ico">
 
-    <title>Project Arif</title>
+    <title>Project One</title>
   
 	<!-- Vendors Style-->
 	<link rel="stylesheet" href="css/vendors_css.css">
@@ -16,7 +21,21 @@
 	<!-- Style-->  
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/skin_color.css">	
+<script type="text/javascript" language="javascript">
 
+            function submitlogin() {
+                var form = document.login;
+				if(form.emailusername.value == ""){
+					alert( "Enter email or username." );
+					return false;
+				}
+				else if(form.password.value == ""){
+					alert( "Enter password." );
+					return false;
+				}
+			}
+
+</script>
 </head>
 	
 <body class="hold-transition theme-primary bg-img" style="background-image: url(../images/auth-bg/bg-1.jpg)">
@@ -30,16 +49,27 @@
 						<div class="bg-white rounded30 shadow-lg">
 							<div class="content-top-agile p-20 pb-0">
 								<h2 class="text-primary">Let's Get Started</h2>
-								<p class="mb-0">Sign in to continue to WebkitX.</p>							
+								<p class="mb-0 text-warning"><?php if (isset($_REQUEST['submit'])) {
+										extract($_REQUEST);
+										$login = $user->check_login($emailusername, $password);
+										if ($login) {
+											// Registration Success
+										   header("location:dashboard.php");
+										} else {
+											// Registration Failed
+											echo  'Wrong username or password';
+										}
+									} ?>
+								</p>							
 							</div>
 							<div class="p-40">
-								<form action="dashboard.php" method="post">
+								<form method="post" name="login">
 									<div class="form-group">
 										<div class="input-group mb-3">
 											<div class="input-group-prepend">
 												<span class="input-group-text bg-transparent"><i class="ti-user"></i></span>
 											</div>
-											<input type="text" class="form-control pl-15 bg-transparent" placeholder="Username">
+											<input type="text" class="form-control pl-15 bg-transparent" name="emailusername" placeholder="Username/Email">
 										</div>
 									</div>
 									<div class="form-group">
@@ -47,7 +77,7 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text  bg-transparent"><i class="ti-lock"></i></span>
 											</div>
-											<input type="password" class="form-control pl-15 bg-transparent" placeholder="Password">
+											<input type="password" class="form-control pl-15 bg-transparent" name="password" placeholder="Password">
 										</div>
 									</div>
 									  <div class="row">
@@ -59,29 +89,15 @@
 										</div>
 										<!-- /.col -->
 										<div class="col-6">
-										 <div class="fog-pwd text-right">
-											<a href="javascript:void(0)" class="hover-warning"><i class="ion ion-locked"></i> Forgot pwd?</a><br>
-										  </div>
 										</div>
 										<!-- /.col -->
 										<div class="col-12 text-center">
-										  <button type="submit" class="btn btn-danger mt-10">SIGN IN</button>
+										  <button onclick="return(submitlogin());" type="submit" name="submit" class="btn btn-danger mt-10">SIGN IN</button>
 										</div>
 										<!-- /.col -->
 									  </div>
-								</form>	
-								<div class="text-center">
-									<p class="mt-15 mb-0">Don't have an account? <a href="auth_register.html" class="text-warning ml-5">Sign Up</a></p>
-								</div>	
+								</form>		
 							</div>						
-						</div>
-						<div class="text-center">
-						  <p class="mt-20 text-white">- Sign With -</p>
-						  <p class="gap-items-2 mb-20">
-							  <a class="btn btn-social-icon btn-round btn-facebook" href="#"><i class="fa fa-facebook"></i></a>
-							  <a class="btn btn-social-icon btn-round btn-twitter" href="#"><i class="fa fa-twitter"></i></a>
-							  <a class="btn btn-social-icon btn-round btn-instagram" href="#"><i class="fa fa-instagram"></i></a>
-							</p>	
 						</div>
 					</div>
 				</div>
