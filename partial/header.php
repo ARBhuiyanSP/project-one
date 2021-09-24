@@ -1,16 +1,13 @@
-<?php
-session_start();
-include_once 'partial/class.user.php';
-$user = new User(); $uid = $_SESSION['uid'];
-if (!$user->get_session()){
- header("location:index.php");
-}
-
-if (isset($_GET['q'])){
- $user->user_logout();
- header("location:index.php");
- }
- ?>
+<?php 
+session_start(); 
+if(!isset($_SESSION['logged']['status'])){
+    header("location: index.php");
+    exit();
+} 
+include 'connection/connect.php';
+include 'includes/flat_process.php';
+include 'helper/utilities.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -86,7 +83,7 @@ if (isset($_GET['q'])){
               <li class="user-body">
 				 <a class="dropdown-item" href="#"><i class="ti-user text-muted mr-2"></i> Profile</a>
 				 <div class="dropdown-divider"></div>
-				 <a class="dropdown-item" href="dashboard.php?q=logout"><i class="ti-lock text-muted mr-2"></i> Logout</a>
+				 <a class="dropdown-item" href="includes/logout.php"><i class="ti-lock text-muted mr-2"></i> Logout</a>
               </li>
             </ul>
           </li>	

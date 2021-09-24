@@ -1,8 +1,11 @@
-<?php
-session_start();
-	include_once 'partial/class.user.php';
-	$user = new User();
- ?>
+<?php session_start();
+if(isset($_SESSION['logged']['status'])){
+    header("location: dashboard.php");
+    exit();
+}  
+include 'connection/connect.php';
+include 'includes/login_process.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,21 +24,6 @@ session_start();
 	<!-- Style-->  
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/skin_color.css">	
-<script type="text/javascript" language="javascript">
-
-            function submitlogin() {
-                var form = document.login;
-				if(form.emailusername.value == ""){
-					alert( "Enter email or username." );
-					return false;
-				}
-				else if(form.password.value == ""){
-					alert( "Enter password." );
-					return false;
-				}
-			}
-
-</script>
 </head>
 	
 <body class="hold-transition theme-primary bg-img" style="background-image: url(../images/auth-bg/bg-1.jpg)">
@@ -49,27 +37,33 @@ session_start();
 						<div class="bg-white rounded30 shadow-lg">
 							<div class="content-top-agile p-20 pb-0">
 								<h2 class="text-primary">Let's Get Started</h2>
-								<p class="mb-0 text-warning"><?php if (isset($_REQUEST['submit'])) {
-										extract($_REQUEST);
-										$login = $user->check_login($emailusername, $password);
-										if ($login) {
-											// Registration Success
-										   header("location:dashboard.php");
-										} else {
-											// Registration Failed
-											echo  'Wrong username or password';
-										}
-									} ?>
-								</p>							
+								<p class="mb-0 text-warning"></p>							
 							</div>
 							<div class="p-40">
-								<form method="post" name="login">
+								<form id="login_form" name="login_form" method="post">
 									<div class="form-group">
 										<div class="input-group mb-3">
 											<div class="input-group-prepend">
 												<span class="input-group-text bg-transparent"><i class="ti-user"></i></span>
 											</div>
-											<input type="text" class="form-control pl-15 bg-transparent" name="emailusername" placeholder="Username/Email">
+											<input type="text" class="form-control pl-15 bg-transparent" id="username" name="username" placeholder="Username">
+											
+												<?php if (isset($_SESSION['error_message']['username_empty']) && !empty($_SESSION['error_message']['username_empty'])) { ?>
+													<div class="alert alert-warning">
+														<strong>Warning!</strong> <?php echo $_SESSION['error_message']['username_empty']; ?>
+													</div>
+													<?php
+													unset($_SESSION['error_message']['username_empty']);
+												}
+												?>
+												<?php if (isset($_SESSION['error_message']['username_valid']) && !empty($_SESSION['error_message']['username_valid'])) { ?>
+													<div class="alert alert-warning">
+														<strong>Warning!</strong> <?php echo $_SESSION['error_message']['username_valid']; ?>
+													</div>
+													<?php
+													unset($_SESSION['error_message']['username_valid']);
+												}
+												?>
 										</div>
 									</div>
 									<div class="form-group">
@@ -77,7 +71,15 @@ session_start();
 											<div class="input-group-prepend">
 												<span class="input-group-text  bg-transparent"><i class="ti-lock"></i></span>
 											</div>
-											<input type="password" class="form-control pl-15 bg-transparent" name="password" placeholder="Password">
+											<input type="password" class="form-control pl-15 bg-transparent" id="password" name="password" placeholder="Password">
+											<?php if (isset($_SESSION['error_message']['password_empty']) && !empty($_SESSION['error_message']['password_empty'])) { ?>
+													<div class="alert alert-warning">
+														<strong>Warning!</strong> <?php echo $_SESSION['error_message']['password_empty']; ?>
+													</div>
+													<?php
+													unset($_SESSION['error_message']['password_empty']);
+												}
+												?>
 										</div>
 									</div>
 									  <div class="row">
@@ -92,7 +94,7 @@ session_start();
 										</div>
 										<!-- /.col -->
 										<div class="col-12 text-center">
-										  <button onclick="return(submitlogin());" type="submit" name="submit" class="btn btn-danger mt-10">SIGN IN</button>
+										  <input type="submit" name="login_submit" value="Sign In" class="btn btn-danger mt-10" />
 										</div>
 										<!-- /.col -->
 									  </div>
