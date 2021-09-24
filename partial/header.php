@@ -128,7 +128,7 @@ include 'helper/utilities.php';
 				  </a>
 				  <ul class="treeview-menu">
 					<li><a href="add-flats.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Add Flats</a></li>
-					<li><a href="sample-table.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Flats List</a></li>
+					<li><a href="flat_list.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Flats List</a></li>
 				  </ul>
 				</li>
 				<li class="header">Reports</li>
