@@ -6,6 +6,7 @@ if(!isset($_SESSION['logged']['status'])){
 } 
 include 'connection/connect.php';
 include 'includes/flat_process.php';
+include 'includes/member_process.php';
 include 'helper/utilities.php';
 ?>
 <!DOCTYPE html>
@@ -118,6 +119,19 @@ include 'helper/utilities.php';
 				  </ul>
 				</li>
 				<li class="header">User Area </li>
+				<li class="treeview">
+				  <a href="#">
+					<i span class="icon-Layout-grid"><span class="path1"></span><span class="path2"></span></i>
+					<span>Member/Clients</span>
+					<span class="pull-right-container">
+					  <i class="fa fa-angle-right pull-right"></i>
+					</span>
+				  </a>
+				  <ul class="treeview-menu">
+					<li><a href="add-member.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Add Member/Clients</a></li>
+					<li><a href="member_list.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Member/Clients List</a></li>
+				  </ul>
+				</li>
 				<li class="treeview">
 				  <a href="#">
 					<i span class="icon-Layout-grid"><span class="path1"></span><span class="path2"></span></i>
