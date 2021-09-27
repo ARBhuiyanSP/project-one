@@ -5,7 +5,7 @@
 global $conn;
 $servername = "localhost";
 $username   = "root";
-$password   = "";
+$password   = "ms@034571";
 $dbname     = "project_one";
 
 // Create connection

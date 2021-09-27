@@ -6,50 +6,36 @@
  * 1. flats (Store single row)    
  * *****************************************************************************
  */
-if (isset($_POST['member_submit']) && !empty($_POST['member_submit'])) {
-	
-	// check duplicate:
-/* 	$code		= $_POST['code'];
-    $table		= 'flats';
-    $where		= "code='$code'";
-    if(isset($_POST['flat_update_submit']) && !empty($_POST['flat_update_submit'])){
-        $notWhere   =   "id!=".$_POST['flat_update_submit'];
-        $duplicatedata = isDuplicateData($table, $where, $notWhere);
-    }else{
-        $duplicatedata = isDuplicateData($table, $where);
-    }
-	if ($duplicatedata) {
-		$status     =   'error';
-		$_SESSION['warning']    =   "Operation faild. Duplicate data found..!";
-    }else{ */
+if (isset($_POST['announcement_submit']) && !empty($_POST['announcement_submit'])) {
 			
-	// Store Data:
-	$code 				= $_POST['code'];
-	$name 				= $_POST['name'];
-	$phone 				= $_POST['phone'];
-	$email 				= $_POST['email'];
-	$address 			= $_POST['address'];
-	$nid 				= $_POST['nid'];
-	$status 			= 'active';
+		// Store Data:
+	$sql = "select * FROM `members`";
+	$result = mysqli_query($conn, $sql);
+	while ($row = mysqli_fetch_array($result)) {
+		$code 				= $_POST['code'];
+		$member_id 			= $row['code'];
+		$date 				= $_POST['date'];
+		$amount 			= $_POST['amount'];
+		$amount_for 		= $_POST['amount_for'];
+		$status 			= 'unpaid';
+		
+	$query = "INSERT INTO `announcement`(`code`,`member_id`,`amount`,`amount_for`,`status`) VALUES ('$code','$member_id','$amount','$amount_for','$status')";
+    $conn->query($query);	
+	}
+		$code 				= $_POST['code'];
+		$date 				= $_POST['date'];
+		$amount 			= $_POST['amount'];
+		$amount_for 		= $_POST['amount_for'];
+		
+	$query2 = "INSERT INTO `announcement_master`(`code`,`amount`,`amount_for`) VALUES ('$code','$amount','$amount_for')";
+    $conn->query($query2);
 	
-	if (is_uploaded_file($_FILES['flatfileToUpload']['tmp_name'])) 
-	  {
-		$photo=time()."_".$_FILES['flatfileToUpload']['name'];
-		$temp_file=$_FILES['flatfileToUpload']['tmp_name'];
-		
-		 move_uploaded_file($temp_file,"flats_photo/".$photo);
-	  }
-       
-		$query = "INSERT INTO `members`(`code`,`name`,`phone`,`email`,`address`,`nid`,`photo`,`status`) VALUES ('$code','$name','$phone','$email','$address','$nid','$photo','$status')";
-        $conn->query($query);
-		
-		
     
-		$_SESSION['success']    =   "Member Entry process have been successfully completed.";
-		header("location: member_list.php");
-		exit();
-/* 	}
- */}
+	$_SESSION['success']    =   "Announcement Entry process have been successfully completed.";
+	header("location: announcement.php");
+	exit();
+
+}
 
 
 

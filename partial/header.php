@@ -7,6 +7,7 @@ if(!isset($_SESSION['logged']['status'])){
 include 'connection/connect.php';
 include 'includes/flat_process.php';
 include 'includes/member_process.php';
+include 'includes/announcement_process.php';
 include 'helper/utilities.php';
 ?>
 <!DOCTYPE html>
@@ -143,6 +144,19 @@ include 'helper/utilities.php';
 				  <ul class="treeview-menu">
 					<li><a href="add-flats.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Add Flats</a></li>
 					<li><a href="flat_list.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Flats List</a></li>
+				  </ul>
+				</li>
+				<li class="treeview">
+				  <a href="#">
+					<i span class="icon-Layout-grid"><span class="path1"></span><span class="path2"></span></i>
+					<span>Announcement</span>
+					<span class="pull-right-container">
+					  <i class="fa fa-angle-right pull-right"></i>
+					</span>
+				  </a>
+				  <ul class="treeview-menu">
+					<li><a href="announcement.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Add Announcement</a></li>
+					<li><a href="announcement_list.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Announcement List</a></li>
 				  </ul>
 				</li>
 				<li class="header">Reports</li>
