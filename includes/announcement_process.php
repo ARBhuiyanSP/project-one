@@ -18,9 +18,13 @@ if (isset($_POST['announcement_submit']) && !empty($_POST['announcement_submit']
 		$amount 			= $_POST['amount'];
 		$amount_for 		= $_POST['amount_for'];
 		$status 			= 'unpaid';
+		$created_by			= 'User';
 		
 	$query = "INSERT INTO `announcement`(`code`,`member_id`,`amount`,`amount_for`,`status`) VALUES ('$code','$member_id','$amount','$amount_for','$status')";
     $conn->query($query);	
+	
+	$querybalance = "INSERT INTO `balance_sheet`(`date`,`balance_ref`,`member_id`,`credit_amount`,`deposit_amount`,`created_by`) VALUES ('$date','$code','$member_id','$amount','0','$created_by')";
+    $conn->query($querybalance);
 	}
 		$code 				= $_POST['code'];
 		$date 				= $_POST['date'];

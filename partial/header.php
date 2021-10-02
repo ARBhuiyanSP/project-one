@@ -159,6 +159,19 @@ include 'helper/utilities.php';
 					<li><a href="announcement_list.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Announcement List</a></li>
 				  </ul>
 				</li>
+				<li class="treeview">
+				  <a href="#">
+					<i span class="icon-Layout-grid"><span class="path1"></span><span class="path2"></span></i>
+					<span>Collection</span>
+					<span class="pull-right-container">
+					  <i class="fa fa-angle-right pull-right"></i>
+					</span>
+				  </a>
+				  <ul class="treeview-menu">
+					<li><a href="collection.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Add Collection</a></li>
+					<li><a href="collection_list.php"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Collection List</a></li>
+				  </ul>
+				</li>
 				<li class="header">Reports</li>
 				<li><a href="#"><i class="icon-Layout-4-blocks"><span class="path1"></span><span class="path2"></span></i><span>Sample Reports</span></a></li>
 					 	     
