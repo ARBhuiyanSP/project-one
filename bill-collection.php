@@ -1,4 +1,7 @@
-<?php include('partial/header.php'); ?>
+<?php 
+include('partial/header.php');
+
+ ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -27,48 +30,67 @@
 				<div class="col-lg-12 col-12">
 					  <div class="box">
 						<!-- /.box-header -->
-						<form action="bill-collection.php" method="post">
+						<form action="" method="post" name="add_name" id="receive_entry_form" enctype="multipart/form-data" onsubmit="showFormIsProcessing('receive_entry_form');">
 							<div class="box-body">
-								<h4 class="box-title text-info"><i class="ti-user mr-15"></i> Bill Collection</h4>
+								<h4 class="box-title text-info"><i class="ti-user mr-15"></i> Bill Collection / Invoice</h4>
 								<hr class="my-15">
 								<div class="row">
 								  <div class="col-md-6">
 									<div class="form-group">
 									  <label>Member</label>
 									  <?php 
-											// Fetch all the country data 
-											$query = "SELECT * FROM members"; 
-											$result = $conn->query($query); 
+											if (isset($_POST['collection_submit']) && !empty($_POST['collection_submit'])) {
+												$member	=	$_POST['member'];
+												$announcement	=	$_POST['announcement'];
+												
+												$sql = "select * FROM `announcement` WHERE `member_id`='$member' AND `code`='$announcement'";
+												$result = mysqli_query($conn, $sql);
+												$row = mysqli_fetch_array($result);
+												
+												$amount =	$row['amount']; 
+												$paid =	$row['paid']; 
+												$due =	$amount -  $paid;
+											}
 										?>
-
 										<!-- Country dropdown -->
-										<select name="member" id="member" class="form-control">
-											<option value="">Select Member</option>
-											<?php 
-											if($result->num_rows > 0){ 
-												while($row = $result->fetch_assoc()){  
-													echo '<option value="'.$row['member_id'].'">'.$row['name'].'</option>'; 
-												} 
-											}else{ 
-												echo '<option value="">Member not available</option>'; 
-											} 
-											?>
-										</select>
+										<input name="amount" type="text" class="form-control" value="<?php echo $member; ?>">
 									</div>
 								  </div>
 								  <div class="col-md-3">
 									<div class="form-group">
 									  <label>Announcement ID</label>
-									  <select name="announcement" id="announcement" class="form-control">
-										<option value="">Select Member First</option>
-									  </select>
+									  <input name="amount" type="text" class="form-control" value="<?php echo $announcement; ?>">
+									</div>
+								  </div>
+								  <div class="col-md-3">
+									<div class="form-group">
+									  <label>Amount</label>
+									  <input name="amount" type="text" class="form-control" value="<?php echo $row['amount']; ?>">
+									</div>
+								  </div>
+								  <div class="col-md-3">
+									<div class="form-group">
+									  <label>Paid</label>
+									  <input name="amount" type="text" class="form-control" value="<?php echo $row['paid']; ?>">
+									</div>
+								  </div>
+								  <div class="col-md-3">
+									<div class="form-group">
+									  <label>Amount Due</label>
+									  <input name="amount" type="text" class="form-control" value="<?php echo $due; ?>">
+									</div>
+								  </div>
+								  <div class="col-md-3">
+									<div class="form-group">
+									  <label>Pay Amount</label>
+									  <input name="payamount" type="number" class="form-control" min="1" max="<?php echo $due; ?>" value="" required>
 									</div>
 								  </div>
 								</div>
 							</div>
 							<!-- /.box-body -->
 							<div class="box-footer">
-								<input type="submit" name="collection_submit" value="Next" class="btn btn-rounded btn-primary btn-outline" />
+								<input type="submit" name="bill_submit" value="Collect Bill" class="btn btn-rounded btn-primary btn-outline" />
 							</div>  
 						</form>
 					  </div>

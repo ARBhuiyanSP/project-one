@@ -8,6 +8,7 @@ include 'connection/connect.php';
 include 'includes/flat_process.php';
 include 'includes/member_process.php';
 include 'includes/announcement_process.php';
+include 'includes/bill_process.php';
 include 'helper/utilities.php';
 ?>
 <!DOCTYPE html>
