@@ -7,25 +7,20 @@
  * *****************************************************************************
  */
 if (isset($_POST['bill_submit']) && !empty($_POST['bill_submit'])) {
-			
-		// Store Data:
-	$sql = "select * FROM `members`";
-	$result = mysqli_query($conn, $sql);
-	while ($row = mysqli_fetch_array($result)) {
+		
 		$code 				= $_POST['code'];
-		$member_id 			= $row['code'];
+		$member_id 			= $row['member_id'];
 		$date 				= $_POST['date'];
-		$amount 			= $_POST['amount'];
 		$payamount 			= $_POST['payamount'];
 		$status 			= 'partially paid';
 		$created_by			= 'User';
 		
-	$query = "UPDATE `announcement` SET `paid`='payamount',`status`='$status' WHERE `id`='$product_id'";
+	$query = "UPDATE `announcement` SET `paid`='$payamount',`status`='$status' WHERE `id`='$product_id'";
     $conn->query($query);	
 	
-	$querybalance = "INSERT INTO `balance_sheet`(`date`,`balance_ref`,`member_id`,`credit_amount`,`deposit_amount`,`created_by`) VALUES ('$date','$code','$member_id','$amount','0','$created_by')";
+	$querybalance = "INSERT INTO `balance_sheet`(`date`,`balance_ref`,`member_id`,`credit_amount`,`deposit_amount`,`created_by`) VALUES ('$date','$code','$member_id','0','$payamount','$created_by')";
     $conn->query($querybalance);
-	}
+	
 	
 	$_SESSION['success']    =   "Announcement Entry process have been successfully completed.";
 	header("location: announcement.php");

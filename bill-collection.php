@@ -53,31 +53,31 @@ include('partial/header.php');
 											}
 										?>
 										<!-- Country dropdown -->
-										<input name="amount" type="text" class="form-control" value="<?php echo $member; ?>">
+										<input name="member_id" type="text" class="form-control" value="<?php echo $member; ?>">
 									</div>
 								  </div>
 								  <div class="col-md-3">
 									<div class="form-group">
 									  <label>Announcement ID</label>
-									  <input name="amount" type="text" class="form-control" value="<?php echo $announcement; ?>">
+									  <input name="code" type="text" class="form-control" value="<?php echo $announcement; ?>">
 									</div>
 								  </div>
 								  <div class="col-md-3">
 									<div class="form-group">
-									  <label>Amount</label>
-									  <input name="amount" type="text" class="form-control" value="<?php echo $row['amount']; ?>">
+									  <label>Total Amount</label>
+									  <input name="" type="text" class="form-control" value="<?php echo $row['amount']; ?>">
 									</div>
 								  </div>
 								  <div class="col-md-3">
 									<div class="form-group">
-									  <label>Paid</label>
-									  <input name="amount" type="text" class="form-control" value="<?php echo $row['paid']; ?>">
+									  <label>Amount Paid</label>
+									  <input name="" type="text" class="form-control" value="<?php echo $row['paid']; ?>">
 									</div>
 								  </div>
 								  <div class="col-md-3">
 									<div class="form-group">
 									  <label>Amount Due</label>
-									  <input name="amount" type="text" class="form-control" value="<?php echo $due; ?>">
+									  <input name="" type="text" class="form-control" value="<?php echo $due; ?>">
 									</div>
 								  </div>
 								  <div class="col-md-3">
