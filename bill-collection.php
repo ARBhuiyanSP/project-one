@@ -64,6 +64,12 @@ include('partial/header.php');
 								  </div>
 								  <div class="col-md-3">
 									<div class="form-group">
+									  <label>Date</label>
+										<input type="date" name="date" class="form-control" value="">
+									</div>
+								  </div>
+								  <div class="col-md-3">
+									<div class="form-group">
 									  <label>Total Amount</label>
 									  <input name="" type="text" class="form-control" value="<?php echo $row['amount']; ?>">
 									</div>

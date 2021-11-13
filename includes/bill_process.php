@@ -9,21 +9,34 @@
 if (isset($_POST['bill_submit']) && !empty($_POST['bill_submit'])) {
 		
 		$code 				= $_POST['code'];
-		$member_id 			= $row['member_id'];
+		$member_id 			= $_POST['member_id'];
 		$date 				= $_POST['date'];
 		$payamount 			= $_POST['payamount'];
-		$status 			= 'partially paid';
+		$type				= 'collection';
 		$created_by			= 'User';
 		
-	$query = "UPDATE `announcement` SET `paid`='$payamount',`status`='$status' WHERE `id`='$product_id'";
+		$sql = "select * FROM `announcement` WHERE `member_id`='$member_id' AND `code`='$code'";
+		$result = mysqli_query($conn, $sql);
+		$row = mysqli_fetch_array($result);
+		$amount =	$row['amount'];
+		$paid =	$row['paid'];
+		$totalpaid = $paid + $payamount;
+		if($amount > $paid){
+			$status 			= 'Partially Paid';
+		}else{
+			$status 			= 'Full Paid';
+		}
+		
+		
+	$query = "UPDATE `announcement` SET `paid`='$totalpaid',`status`='$status' WHERE `member_id`='$member_id' AND `code`='$code'";
     $conn->query($query);	
 	
-	$querybalance = "INSERT INTO `balance_sheet`(`date`,`balance_ref`,`member_id`,`credit_amount`,`deposit_amount`,`created_by`) VALUES ('$date','$code','$member_id','0','$payamount','$created_by')";
+	$querybalance = "INSERT INTO `balance_sheet`(`date`,`balance_ref`,`member_id`,`credit_amount`,`deposit_amount`,`type`,`created_by`) VALUES ('$date','$code','$member_id','0','$payamount','$type','$created_by')";
     $conn->query($querybalance);
 	
 	
 	$_SESSION['success']    =   "Announcement Entry process have been successfully completed.";
-	header("location: announcement.php");
+	header("location: collection.php");
 	exit();
 
 }

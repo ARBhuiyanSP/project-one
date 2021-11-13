@@ -32,33 +32,28 @@
 					  <table id="example" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
 						<thead>
 							<tr>
-								<th>Code</th>
-								<th>Name</th>
-								<th>Status</th>
+								<th>Date</th>
+								<th>Member</th>
+								<th>Amount</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php
 								
-								$sql = "select * FROM `flats`";
-								
-								
+								$sql = "select * FROM `balance_sheet` WHERE `type`='collection'";
 								//$sql = "select * from ams_products where `store_id`='$store_id'";
 								$result = mysqli_query($conn, $sql);
 								while ($row = mysqli_fetch_array($result)) {
-									
-								if($row['status']=='for_sale'){
-									?>
-							<tr class="edit_tr" style="background-color:#F5A143;color:#ffffff;">
-								<?php } else{?>
+								?>
 							<tr class="edit_tr" style="background-color:#64D55F;color:#ffffff;">
-								<?php } ?>
-								
-								<th><?php echo $row['code'] ?></th>
-								<th><?php echo $row['name'] ?></th>
-								<th><?php echo $row['status'] ?></th>
-								<th>Action</th>
+								<th><?php echo $row['date'] ?></th>
+								<th><?php echo $row['member_id'] ?></th>
+								<th><?php echo $row['deposit_amount'] ?></th>
+								<th>
+									<a href="#" class="btn btn-success"><i class="fa fa-pencil"></i></a>
+									<a href="collection-details.php?id=<?php echo $row['id'] ?>" class="btn btn-success"><i class="fa fa-eye"></i></a>
+								</th>
 							</tr>
 								<?php } ?>
 						</tbody>				  
