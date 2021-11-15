@@ -2,12 +2,15 @@
 if (isset($_POST['login_submit']) && !empty($_POST['login_submit'])) { 
     $error_status   =   false;
     $error_string   =   [];
-    if(isset($_POST['username']) && !empty($_POST['username'])){
-        $username      =   $_POST['username'];
-        
+    if(isset($_POST['email']) && !empty($_POST['email'])){
+        $email      =   $_POST['email'];
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error_status                   =   true;
+            $error_string['email_valid']    =   'Invalid format and please re-enter valid email';
+        }
     }else{
         $error_status                   =   true;
-        $error_string['username_empty']    =   'username is required.';
+        $error_string['email_empty']    =   'Email is reqiored.';
     }
     if(isset($_POST['password']) && !empty($_POST['password'])){
         $password      =   mysqli_real_escape_string($conn, $_POST['password']);
@@ -25,10 +28,10 @@ if (isset($_POST['login_submit']) && !empty($_POST['login_submit'])) {
         header("location: index.php");
         exit();
     }else{
-        $usernamesql    = "SELECT * FROM users where username='$username'";
-        $result = $conn->query($usernamesql);
+        $emailsql    = "SELECT * FROM users where email='$email'";
+        $result = $conn->query($emailsql);
         if ($result->num_rows > 0) {
-            $passsql    = "SELECT * FROM users where username='$username' AND password='$password'";
+            $passsql    = "SELECT * FROM users where email='$email' AND password='$password'";
             $presult = $conn->query($passsql);
             if ($presult->num_rows > 0) {
                 $row        	=   $presult->fetch_object();
@@ -38,11 +41,6 @@ if (isset($_POST['login_submit']) && !empty($_POST['login_submit'])) {
                 $user_type		=   $row->user_type;
                 $project_id		=   $row->project_id;
                 $warehouse_id	=   $row->warehouse_id;
-				
-                $username		=   $row->username;
-                $store_id		=   $row->store_id;
-                $employee_id	=   $row->employee_id;
-                $role			=   $row->role;
                 unset($_SESSION['error']);
                 $_SESSION['success']                =   $fname.' '.$lname." have successfully loggedin!";
                 $_SESSION['logged']['user_name']    =   $fname.' '.$lname;
@@ -50,11 +48,6 @@ if (isset($_POST['login_submit']) && !empty($_POST['login_submit'])) {
                 $_SESSION['logged']['user_type']	=   $user_type;
                 $_SESSION['logged']['project_id']	=   $project_id;
                 $_SESSION['logged']['warehouse_id']	=   $warehouse_id;
-				
-                $_SESSION['logged']['username']		=   $username;
-                $_SESSION['logged']['store_id']		=   $store_id;
-                $_SESSION['logged']['employee_id']	=   $employee_id;
-                $_SESSION['logged']['role']			=   $role;
 
                 $_SESSION['logged']['status']		=   true;
                 header("location: dashboard.php");
@@ -68,7 +61,7 @@ if (isset($_POST['login_submit']) && !empty($_POST['login_submit'])) {
             }
         }else{
             $error_status   =   true;
-            $_SESSION['error_message']['username_valid']    =   'Invalid username';
+            $_SESSION['error_message']['email_valid']    =   'Invalid email';
             $_SESSION['error']                           =   "Login credential was not correct.";
             header("location: index.php");
             exit();

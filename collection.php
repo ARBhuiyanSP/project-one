@@ -1,90 +1,70 @@
-<?php include('partial/header.php'); ?>
+<?php 
+include 'header.php';
+?>
+<!-- Left Sidebar End -->
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="dashboard.php">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Collection Entry</li>
+    </ol>
+    <!-- DataTables Example -->
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-table"></i> Collection Entry Form
+		</div>
+        <div class="card-body">
+            <!--here your code will go-->
+            <div class="form-group">
+                <form action="bill-collection.php" method="post">
+					<div class="row" id="div1" style="">
+						<div class="col-md-6">
+							<div class="form-group">
+							  <label>Member</label>
+							  <?php 
+									// Fetch all the country data 
+									$query = "SELECT * FROM members"; 
+									$result = $conn->query($query); 
+								?>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-	  <div class="container-full">
-		<!-- Content Header (Page header) -->
-		<div class="content-header">
-			<div class="d-flex align-items-center">
-				<div class="mr-auto">
-					<h3 class="page-title">Collection Form</h3>
-					<div class="d-inline-block align-items-center">
-						<nav>
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
-								<li class="breadcrumb-item active" aria-current="page">Add Collection</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
-				
-			</div>
-		</div>	  
-
-		<!-- Main content -->
-		<section class="content">
-			<div class="row">			  
-				<div class="col-lg-12 col-12">
-					  <div class="box">
-						<!-- /.box-header -->
-						<form action="bill-collection.php" method="post">
-							<div class="box-body">
-								<h4 class="box-title text-info"><i class="ti-user mr-15"></i> Bill Collection</h4>
-								<hr class="my-15">
-								<div class="row">
-								  <div class="col-md-6">
-									<div class="form-group">
-									  <label>Member</label>
-									  <?php 
-											// Fetch all the country data 
-											$query = "SELECT * FROM members"; 
-											$result = $conn->query($query); 
-										?>
-
-										<!-- Country dropdown -->
-										<select name="member" id="member" class="form-control">
-											<option value="">Select Member</option>
-											<?php 
-											if($result->num_rows > 0){ 
-												while($row = $result->fetch_assoc()){  
-													echo '<option value="'.$row['member_id'].'">'.$row['name'].'</option>'; 
-												} 
-											}else{ 
-												echo '<option value="">Member not available</option>'; 
-											} 
-											?>
-										</select>
-									</div>
-								  </div>
-								  <div class="col-md-3">
-									<div class="form-group">
-									  <label>Announcement ID</label>
-									  <select name="announcement" id="announcement" class="form-control">
-										<option value="">Select Member First</option>
-									  </select>
-									</div>
-								  </div>
-								</div>
+								<!-- Country dropdown -->
+								<select name="member" id="member" class="form-control">
+									<option value="">Select Member</option>
+									<?php 
+									if($result->num_rows > 0){ 
+										while($row = $result->fetch_assoc()){  
+											echo '<option value="'.$row['member_id'].'">'.$row['name'].'</option>'; 
+										} 
+									}else{ 
+										echo '<option value="">Member not available</option>'; 
+									} 
+									?>
+								</select>
 							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
-								<input type="submit" name="collection_submit" value="Next" class="btn btn-rounded btn-primary btn-outline" />
-							</div>  
-						</form>
-					  </div>
-					  <!-- /.box -->			
-				</div>  
-		    </div>
-		</section>
-		<!-- /.content -->
-	  </div>
-  </div>
-  <!-- /.content-wrapper -->
-  <!-- /.content-wrapper -->
-  
-  <?php include('partial/footer.php'); ?>
-</body>
-</html>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+							  <label>Announcement ID</label>
+							  <select name="announcement" id="announcement" class="form-control">
+								<option value="">Select Member First</option>
+							  </select>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="submit" name="collection_submit" value="SAVE INFO" class="btn btn-primary btn-block" />
+							</div>
+						</div>
+					</div>
+                </form>
+            </div>
+            <!--here your code will go-->
+        </div>
+    </div>
+
+</div>
 <script>
 $(document).ready(function(){
     $('#member').on('change', function(){
@@ -105,3 +85,5 @@ $(document).ready(function(){
     
 });
 </script>
+<!-- /.container-fluid -->
+<?php include 'footer.php' ?>

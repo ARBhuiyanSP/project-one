@@ -40,13 +40,13 @@ if (isset($_POST['member_submit']) && !empty($_POST['member_submit'])) {
 		 move_uploaded_file($temp_file,"flats_photo/".$photo);
 	  }
        
-		$query = "INSERT INTO `members`(`code`,`name`,`phone`,`email`,`address`,`nid`,`photo`,`status`) VALUES ('$code','$name','$phone','$email','$address','$nid','$photo','$status')";
+		$query = "INSERT INTO `members`(`member_id`,`name`,`phone`,`email`,`address`,`nid`,`photo`,`status`) VALUES ('$code','$name','$phone','$email','$address','$nid','$photo','$status')";
         $conn->query($query);
 		
 		
     
 		$_SESSION['success']    =   "Member Entry process have been successfully completed.";
-		header("location: member_list.php");
+		header("location: member.php");
 		exit();
 /* 	}
  */}

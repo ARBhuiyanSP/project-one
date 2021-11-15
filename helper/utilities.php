@@ -1,18 +1,5 @@
 <?php
 
-function getDefaultCategoryCodeByStore($table, $fieldName, $modifier, $defaultCode, $prefix){
-    global $conn;
-	$store_id	=	$_SESSION['logged']['store_id'];
-    $sql    	= "SELECT count($fieldName) as total_row FROM $table WHERE store_id=$store_id";
-    $result 	= $conn->query($sql);
-    $name   	=   '';
-    $lastRows   = $result->fetch_object();
-    $number     = intval($lastRows->total_row) + 1;
-    $defaultCode = $prefix.sprintf('%'.$modifier, $number);
-    return $defaultCode;
-    
-}
-
 function getTableDataByTableNamePackage($table, $order = 'asc', $column='id', $dataType = '') {
     global $conn;
     $dataContainer  =   [];
@@ -54,11 +41,10 @@ function getTableDataByTableName($table, $order = 'asc', $column='id', $dataType
     }
     return $dataContainer;
 }
-
-function getPONumber($table, $order = 'asc', $column='id', $dataType = '') {
+/* function getwarehouseinfo($table, $order = 'asc', $column='id', $dataType = '') {
     global $conn;
     $dataContainer  =   [];
-    $sql = "SELECT * FROM $table GROUP BY `purchase_id`";
+    $sql = "SELECT * FROM $table WHERE `short_name` !='CW' order by $column $order";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -74,12 +60,11 @@ function getPONumber($table, $order = 'asc', $column='id', $dataType = '') {
         }
     }
     return $dataContainer;
-}
-
+} */
 function getwarehouseinfo($table, $order = 'asc', $column='id', $dataType = '') {
     global $conn;
     $dataContainer  =   [];
-    $sql = "SELECT * FROM $table WHERE `short_name` !='CW' order by $column $order";
+    $sql = "SELECT * FROM $table order by $column $order";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -232,8 +217,7 @@ function getDefaultCategoryCode($table, $fieldName, $modifier, $defaultCode, $pr
 
 function getDefaultCategoryCodeByWarehouse($table, $fieldName, $modifier, $defaultCode, $prefix){
     global $conn;
-	/* $warehouse_id	=	$_SESSION['logged']['warehouse_id']; */
-	$warehouse_id	=	$_SESSION['logged']['store_id'];
+	$warehouse_id	=	$_SESSION['logged']['warehouse_id'];
     $sql    	= "SELECT count($fieldName) as total_row FROM $table WHERE warehouse_id=$warehouse_id";
     $result 	= $conn->query($sql);
     $name   	=   '';
@@ -246,36 +230,8 @@ function getDefaultCategoryCodeByWarehouse($table, $fieldName, $modifier, $defau
 
 function getDefaultCategoryCodeByWarehouseT($table, $fieldName, $modifier, $defaultCode, $prefix){
     global $conn;
-	/* $warehouse_id	=	$_SESSION['logged']['warehouse_id']; */
-	$warehouse_id	=	$_SESSION['logged']['store_id'];
+	$warehouse_id	=	$_SESSION['logged']['warehouse_id'];
     $sql    	= "SELECT count($fieldName) as total_row FROM $table WHERE from_warehouse=$warehouse_id";
-    $result 	= $conn->query($sql);
-    $name   	=   '';
-    $lastRows   = $result->fetch_object();
-    $number     = intval($lastRows->total_row) + 1;
-    $defaultCode = $prefix.sprintf('%'.$modifier, $number);
-    return $defaultCode;
-    
-}
-
-function getDefaultVendorCode($table, $fieldName, $modifier, $defaultCode, $prefix){
-    global $conn;
-	/* $warehouse_id	=	$_SESSION['logged']['warehouse_id'];
-	$warehouse_id	=	$_SESSION['logged']['store_id']; */
-    $sql    	= "SELECT count($fieldName) as total_row FROM $table";
-    $result 	= $conn->query($sql);
-    $name   	=   '';
-    $lastRows   = $result->fetch_object();
-    $number     = intval($lastRows->total_row) + 1;
-    $defaultCode = $prefix.sprintf('%'.$modifier, $number);
-    return $defaultCode;
-    
-}
-
-function getDefaultCategoryCodeByProjectT($table, $fieldName, $modifier, $defaultCode, $prefix){
-    global $conn;
-	$project_id	=	$_SESSION['logged']['project_id'];
-    $sql    	= "SELECT count($fieldName) as total_row FROM $table WHERE from_project=4";
     $result 	= $conn->query($sql);
     $name   	=   '';
     $lastRows   = $result->fetch_object();
@@ -335,6 +291,238 @@ function isDuplicateData($table, $where, $notWhere=''){
     return false;
 }
 
+function stockReportCheck() {
+    $dataContainer = [];
+    global $conn;
+    $sql = "SELECT mb_materialid, (SUM(mbin_qty)-SUM(mbout_qty)) as BalanceQty, (SUM(mbin_val)-SUM(mbout_val)) as BalanceVal  FROM `inv_materialbalance` GROUP BY mb_materialid";
+	
+    /* $sql = "SELECT mb_materialid, (SUM(mbin_qty)-SUM(mbout_qty)) as BalanceQty, (SUM(mbin_val)-SUM(mbout_val)) as BalanceVal  FROM `inv_materialbalance` WHERE `approval_status`='1' GROUP BY mb_materialid"; */
+	
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_object()) {
+            $dataContainer[] = $row;
+        }
+    }
+    return $dataContainer;
+}
+function getTotalstockInOutQuantityCheck($mid, $type) {
+    $TOTAL = 0;
+    global $conn;
+    if($type    ==  'in'){
+        $sql = "SELECT SUM(mbin_qty) as Total  FROM `inv_materialbalance` WHERE mb_materialid='$mid'";
+        /* $sql = "SELECT SUM(mbin_qty) as Total  FROM `inv_materialbalance` WHERE mb_materialid='$mid' AND `approval_status`='1'"; */
+    }
+    if($type    ==  'out'){
+        $sql = "SELECT SUM(mbout_qty) as Total  FROM `inv_materialbalance` WHERE mb_materialid='$mid'";
+       /*  $sql = "SELECT SUM(mbout_qty) as Total  FROM `inv_materialbalance` WHERE mb_materialid='$mid' AND `approval_status`='1'"; */
+    }
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $TOTAL = $result->fetch_object()->Total;
+    }
+    return $TOTAL;
+}
+function get_product_stock_by_material_id($param) {
+    //default value:
+    $totalStock =   0;
+    // opening quantity:
+    $opeingQuantityData     =   get_material_balance_opening_quantity($param);
+    $openingQuantity        =   (isset($opeingQuantityData->openingMbInTotal) && !empty($opeingQuantityData->openingMbInTotal) ? $opeingQuantityData->openingMbInTotal : 0);
+    
+    // recieving quantity:
+    $receivingQuantityData  =   get_material_balance_receiving_quantity($param);
+    $receivingQuantity      =   (isset($receivingQuantityData->receivingMbInTotal) && !empty($receivingQuantityData->receivingMbInTotal) ? $receivingQuantityData->receivingMbInTotal : 0);
+    
+    // issue quantity:
+    $issueQuantityData      =   get_material_balance_issue_quantity($param);
+    $issueQuantity          =   (isset($issueQuantityData->issueMbOutTotal) && !empty($issueQuantityData->issueMbOutTotal) ? $issueQuantityData->issueMbOutTotal : 0);
+	
+	// return quantity:
+    $returnQuantityData      =   get_material_balance_return_quantity($param);
+    $returnQuantity          =   (isset($returnQuantityData->returnMbInTotal) && !empty($returnQuantityData->returnMbInTotal) ? $returnQuantityData->returnMbInTotal : 0);
+    
+    // transfer_out quantity:
+    $transfer_outQuantityData      =   get_material_balance_transfer_out_quantity($param);
+    $transfer_outQuantity          =   (isset($transfer_outQuantityData->transferOutMbOutTotal) && !empty($transfer_outQuantityData->transferOutMbOutTotal) ? $transfer_outQuantityData->transferOutMbOutTotal : 0);
+    
+    // transfer_out quantity:
+    $transfer_inQuantityData      =   get_material_balance_transfer_in_quantity($param);
+    $transfer_inQuantity          =   (isset($transfer_inQuantityData->transferInMbInTotal) && !empty($transfer_inQuantityData->transferInMbInTotal) ? $transfer_inQuantityData->transferInMbInTotal : 0);
+    
+    
+    $totalIn    =   ($openingQuantity + $receivingQuantity + $returnQuantity + $transfer_inQuantity);
+    $totalOut   =   ($issueQuantity + $transfer_outQuantity);
+    
+    $totalStock     =   $totalIn - $totalOut;
+    return $totalStock;
+}
+/*
+ * Method for get opeing total data
+ * $param
+ * 1. mb_materialid
+ * 2. warehouse_id
+ */
+function get_material_balance_opening_quantity($param){
+    global $conn;
+    $rowData    =   '';
+    $mb_materialid  =   $param['mb_materialid'];
+    $warehouse_id   =   $param['warehouse_id'];
+    $sql            =   "SELECT mb_materialid,"
+            . " sum(mbin_qty) as openingMbInTotal,"
+            . " sum(mbout_qty) as openingMbOutTotal,"
+            . " mbin_qty, mbin_val,"
+            . " mbout_qty,"
+            . " mbout_val,"
+            . " mbprice FROM inv_materialbalance WHERE mb_materialid = '$mb_materialid'"
+            . " AND warehouse_id='$warehouse_id'"
+            /* . " AND `approval_status`='1'" */
+            . " AND mbtype='OP'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $rowData = $result->fetch_object();
+    }
+    return $rowData;
+}
+
+/*
+ * Method for get receiving total data
+ * $param
+ * 1. mb_materialid
+ * 2. warehouse_id
+ */
+function get_material_balance_receiving_quantity($param){
+    global $conn;
+    $rowData    =   '';
+    $mb_materialid  =   $param['mb_materialid'];
+    $warehouse_id   =   $param['warehouse_id'];
+    $sql            =   "SELECT mb_materialid,"
+            . " sum(mbin_qty) as receivingMbInTotal,"
+            . " sum(mbout_qty) as receivingMbOutTotal,"
+            . " mbin_qty, mbin_val,"
+            . " mbout_qty,"
+            . " mbout_val,"
+            . " mbprice FROM inv_materialbalance WHERE mb_materialid = '$mb_materialid'"
+            . " AND warehouse_id='$warehouse_id'"
+            /* . " AND `approval_status`='1'" */
+            . " AND mbtype='Receive'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $rowData = $result->fetch_object();
+    }
+    return $rowData;
+}
+/*
+ * Method for get return total data
+ * $param
+ * 1. mb_materialid
+ * 2. warehouse_id
+ */
+function get_material_balance_return_quantity($param){
+    global $conn;
+    $rowData    =   '';
+    $mb_materialid  =   $param['mb_materialid'];
+    $warehouse_id   =   $param['warehouse_id'];
+    $sql            =   "SELECT mb_materialid,"
+            . " sum(mbin_qty) as returnMbInTotal,"
+            . " sum(mbout_qty) as returnMbOutTotal,"
+            . " mbin_qty, mbin_val,"
+            . " mbout_qty,"
+            . " mbout_val,"
+            . " mbprice FROM inv_materialbalance WHERE mb_materialid = '$mb_materialid'"
+            . " AND warehouse_id='$warehouse_id'"
+            /* . " AND `approval_status`='1'" */
+            . " AND mbtype='Return'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $rowData = $result->fetch_object();
+    }
+    return $rowData;
+}
+
+/*
+ * Method for get Issue total data
+ * $param
+ * 1. mb_materialid
+ * 2. warehouse_id
+ */
+function get_material_balance_issue_quantity($param){
+    global $conn;
+    $rowData    =   '';
+    $mb_materialid  =   $param['mb_materialid'];
+    $warehouse_id   =   $param['warehouse_id'];
+    $sql            =   "SELECT mb_materialid,"
+            . " sum(mbin_qty) as issueMbInTotal,"
+            . " sum(mbout_qty) as issueMbOutTotal,"
+            . " mbin_qty, mbin_val,"
+            . " mbout_qty,"
+            . " mbout_val,"
+            . " mbprice FROM inv_materialbalance WHERE mb_materialid = '$mb_materialid'"
+            . " AND warehouse_id='$warehouse_id'"
+            /* . " AND `approval_status`='1'" */
+            . " AND mbtype='Issue'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $rowData = $result->fetch_object();
+    }
+    return $rowData;
+}
+
+/*
+ * Method for get Transfer Out total data
+ * $param
+ * 1. mb_materialid
+ * 2. warehouse_id
+ */
+function get_material_balance_transfer_out_quantity($param){
+    global $conn;
+    $rowData    	=   '';
+    $mb_materialid  =   $param['mb_materialid'];
+    $warehouse_id   =   $param['warehouse_id'];
+    $sql            =   "SELECT mb_materialid,"
+            . " sum(mbin_qty) as transferOutMbInTotal,"
+            . " sum(mbout_qty) as transferOutMbOutTotal,"
+            . " mbin_qty, mbin_val,"
+            . " mbout_qty,"
+            . " mbout_val,"
+            . " mbprice FROM inv_materialbalance WHERE mb_materialid = '$mb_materialid'"
+            . " AND warehouse_id='$warehouse_id'"
+            /* . " AND `approval_status`='1'" */
+            . " AND mbtype='Transfer Out'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $rowData = $result->fetch_object();
+    }
+    return $rowData;
+}
+
+/*
+ * Method for get Transfer In total data
+ * $param
+ * 1. mb_materialid
+ * 2. warehouse_id
+ */
+function get_material_balance_transfer_in_quantity($param){
+    global $conn;
+    $rowData    =   '';
+    $mb_materialid  =   $param['mb_materialid'];
+    $warehouse_id   =   $param['warehouse_id'];
+    $sql            =   "SELECT mb_materialid,"
+            . " sum(mbin_qty) as transferInMbInTotal,"
+            . " sum(mbout_qty) as transferInMbOutTotal,"
+            . " mbin_qty, mbin_val,"
+            . " mbout_qty,"
+            . " mbout_val,"
+            . " mbprice FROM inv_materialbalance WHERE mb_materialid = '$mb_materialid'"
+            . " AND warehouse_id='$warehouse_id'"
+            /* . " AND `approval_status`='1'" */
+            . " AND mbtype='Transfer In'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $rowData = $result->fetch_object();
+    }
+    return $rowData;
+}
 
 function convertNumberToWords(float $number)
 {
@@ -391,7 +579,7 @@ function convertNumberToWords(float $number)
     
     function getmaterialbrand(){
         global $conn;
-        $sql = "SELECT * FROM inv_item_brand";
+        $sql = "SELECT brand_name FROM inv_material group by brand_name order by brand_name";
         $result = $conn->query($sql);
         $dataContainer   =   [];
         if ($result->num_rows > 0) {
@@ -408,39 +596,3 @@ function convertNumberToWords(float $number)
         }
         return $dataContainer;
     }
-    
-    // the following method will validate data:
-    // added by tanveer Qureshee: 2021-05-29
-    function check_input_data($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-     }
-     
-// General update function 
-// Added by Tanveer Qureshee
-     
-function update_data($table, $data, $id) {
-    global $conn;
-    $setColumn = array();
-    foreach ($data as $key => $value) {
-        $setColumn[] = "{$key} = '{$value}'";
-    }
-
-    $sql = "UPDATE {$table} SET " . implode(', ', $setColumn) . " WHERE id = '$id'";
-    if ($conn->query($sql) === TRUE) {
-        $feedbackData   =   [
-            'id'        =>  $id,
-            'status'    =>  'success',
-            'message'   =>  'Data have been successfully Updated',
-        ];
-    } else {
-        $feedbackData   =   [
-            'id'        =>  $id,
-            'status'    =>  'error',
-            'message'   =>  "Error: " . $sql . "<br>" . $conn->error,
-        ];        
-    }
-    return $feedbackData;
-}

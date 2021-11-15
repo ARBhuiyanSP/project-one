@@ -1,80 +1,126 @@
-<?php include('partial/header.php'); ?>
+<?php include 'header.php';
+$id=$_GET['id']; ?>
+<style>
+.table-bordered {
+	border: 1px solid #000000;
+}
+.table-bordered th, .table-bordered td{
+	border: 1px solid #000000;
+}
+.table th, .table td {
+	padding:2px 10px 2px 10px;
+}
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-	  <div class="container-full">
-		<!-- Content Header (Page header) -->
-		<div class="content-header">
-			<div class="d-flex align-items-center">
-				<div class="mr-auto">
-					<h3 class="page-title">Collection Details</h3>
-					<div class="d-inline-block align-items-center">
-						<nav>
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
-								<li class="breadcrumb-item active" aria-current="page">Collection Details</li>
-							</ol>
-						</nav>
+.challan{
+	font-weight:bold;
+}
+.amountWords{
+	text-decoration:underline;
+	font-style:italic;
+	color:#f26522;
+}
+
+
+</style>
+
+<link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css">
+<script src="js/jquery.fancybox.js"></script>
+
+<div class="container-fluid">
+    <!-- DataTables Example -->
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-table"></i>
+            Bill Collection Receipt/Invoice
+			<?php
+				$sqld = "select * FROM `balance_sheet` WHERE `id`='$id'";
+				$resultd = mysqli_query($conn, $sqld);
+				$rowd = mysqli_fetch_array($resultd);
+			?>
+			<!-- Your HTML content goes here -->
+			<button class="btn btn-default" onclick="printDiv('printableArea')" style="float:right;"><i class="fa fa-print" aria-hidden="true" style="font-size: 17px;"> Print</i></button></div>
+			<div class="card-body" id="printableArea">
+				<div class="row">
+					<div class="col-sm-1"></div>
+					<div class="col-sm-10">
+						<div class="row">
+							<div class="col-sm-6">	
+								<p>
+								<img src="images/Saif_Engineering_Logo_165X72.png" height="100px;"/></p></div>
+							<div class="col-sm-6">
+								<table class="table table-bordered">
+									<tr>
+										<th>Announcement ID:</th>
+										<td><?php echo $rowd['balance_ref']; ?></td>
+									</tr>
+									<tr>
+										<th>Collection Date:</th>
+										<td><?php
+										echo $rowd['date']; ?></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<center><button class="btn btn-block btn-secondary challan">Bill Collection Receipt/Invoice</button></center>
+						<table class="table table-bordered">
+							<tbody>
+							<tr>
+							  <th>Date</th>
+							  <th>Amount</th>
+							  <th>Payment Method</th>
+							</tr>
+							
+							<?php			
+							$id	=	$_GET['id'];
+							$sql = "select * FROM `balance_sheet` WHERE `id`='$id'";
+							$result = mysqli_query($conn, $sql);
+							$row = mysqli_fetch_array($result);
+							$amount= $row['deposit_amount'];
+								?>
+							<tr>
+							  <td><?php echo $row['date'] ?></td>
+							  <td><?php echo $row['deposit_amount']; ?></td>
+							  <td>Cash</td>
+							</tr>
+							</tbody>
+						  </table>
+						<b>Total Amount in words: 
+							<span class="amountWords"><?php echo convertNumberToWords($amount).' Only';?></span>
+						</b> 
+						<div class="row" style="text-align:center">
+							<div class="col-sm-5"></br></br>--------------------</br>Receiver Signature</div>
+										
+										
+										
+							<div class="col-sm-2"> </div>
+							
+							
+							
+							<div class="col-sm-5"></br></br>--------------------</br>Authorised Signature</div>
+						</div></br>
+						<div class="row">
+							<div class="col-sm-12" style="border:1px solid gray;border-radius:5px;padding:10px;color:#f26522;">
+								<h5>Notice***</br><span style="font-size:14px;color:#000000;">Please Check Everything Before Signature</span></h5>
+								
+							</div>
+						</div>
 					</div>
+					<div class="col-sm-1"></div>
 				</div>
-				
-			</div>
-		</div>
+			</div>				
+			<script>
+			function printDiv(divName) {
+				 var printContents = document.getElementById(divName).innerHTML;
+				 var originalContents = document.body.innerHTML;
 
-		<!-- Main content -->
-		<section class="invoice printableArea">
-		  <div class="row">
-			<div class="col-12">
-			  <div class="bb-1 clearFix">
-				<div class="text-right pb-15">
-					<button id="print2" class="btn btn-warning" type="button"> <span><i class="fa fa-print"></i> Print</span> </button>
-				</div>	
-			  </div>
-			</div>
-			<div class="col-12">
-			  <div class="page-header">
-				<h2 class="d-inline"><span class="font-size-30">Collection Details</span></h2>
-				<div class="pull-right text-right">
-					<h3></h3>
-				</div>	
-			  </div>
-			</div>
-			<!-- /.col -->
-		  </div>
-		  <div class="row">
-			<div class="col-12 table-responsive">
-			  <table class="table table-bordered">
-				<tbody>
-				<tr>
-				  <th>Date</th>
-				  <th>Amount</th>
-				  <th>Payment Method</th>
-				</tr>
-				
-				<?php			
-				$id	=	$_GET['id'];
-				$sql = "select * FROM `balance_sheet` WHERE `id`='$id'";
-				$result = mysqli_query($conn, $sql);
-				while ($row = mysqli_fetch_array($result)) {
-					?>
-				<tr>
-				  <td><?php echo $row['date'] ?></td>
-				  <td><?php echo $row['deposit_amount'] ?></td>
-				  <td>Cash</td>
-				</tr>
-				<?php } ?>
-				</tbody>
-			  </table>
-			</div>
-			<!-- /.col -->
-		  </div>
-		</section>
-		<!-- /.content -->
-	  
-	  </div>
-  </div>
-  <!-- /.content-wrapper -->
-  
-  <?php include('partial/footer.php'); ?>
-</body>
-</html>
+				 document.body.innerHTML = printContents;
+
+				 window.print();
+
+				 document.body.innerHTML = originalContents;
+			}
+			</script>
+		</div>
+	</div>
+<!-- /.container-fluid -->
+<?php include 'footer.php' ?>

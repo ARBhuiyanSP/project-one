@@ -13,7 +13,7 @@ if (isset($_POST['announcement_submit']) && !empty($_POST['announcement_submit']
 	$result = mysqli_query($conn, $sql);
 	while ($row = mysqli_fetch_array($result)) {
 		$code 				= $_POST['code'];
-		$member_id 			= $row['code'];
+		$member_id 			= $row['member_id'];
 		$date 				= $_POST['date'];
 		$amount 			= $_POST['amount'];
 		$amount_for 		= $_POST['amount_for'];

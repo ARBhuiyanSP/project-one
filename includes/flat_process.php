@@ -43,7 +43,7 @@ if (isset($_POST['flat_submit']) && !empty($_POST['flat_submit'])) {
 		
     
 		$_SESSION['success']    =   "Flat Entry process have been successfully completed.";
-		header("location: flat_list.php");
+		header("location: flats.php");
 		exit();
 /* 	}
  */}

@@ -1,79 +1,96 @@
-<?php include('partial/header.php'); ?>
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-	  <div class="container-full">
-		<!-- Content Header (Page header) -->
-		<div class="content-header">
-			<div class="d-flex align-items-center">
-				<div class="mr-auto">
-					<h3 class="page-title">Announcement Add Form</h3>
-					<div class="d-inline-block align-items-center">
-						<nav>
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
-								<li class="breadcrumb-item active" aria-current="page">Add Announcement</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
-				
-			</div>
-		</div>	  
-
-		<!-- Main content -->
-		<section class="content">
-			<div class="row">			  
-				<div class="col-lg-12 col-12">
-					  <div class="box">
-						<!-- /.box-header -->
-						<form action="" method="post" name="add_name" id="receive_entry_form" enctype="multipart/form-data" onsubmit="showFormIsProcessing('receive_entry_form');">
-							<div class="box-body">
-								<h4 class="box-title text-info"><i class="ti-user mr-15"></i> Announcement Info</h4>
-								<hr class="my-15">
-								<div class="row">
-								  <div class="col-md-3">
-									<div class="form-group">
-									  <label>Code</label>
-										<input type="text" name="code" class="form-control" value="<?php echo getDefaultCategoryCode('announcement_master', 'code', '03d', '001', 'AN-') ?>" readonly>
-									</div>
-								  </div>
-								  <div class="col-md-3">
-									<div class="form-group">
-									  <label>Date</label>
-										<input type="date" name="date" class="form-control" value="">
-									</div>
-								  </div>
-								  <div class="col-md-3">
-									<div class="form-group">
-									  <label>Amount</label>
-									  <input name="amount" type="text" class="form-control" placeholder="Amount">
-									</div>
-								  </div>
-								  <div class="col-md-3">
-									<div class="form-group">
-									  <label>Amount For</label>
-									  <input name="amount_for" type="text" class="form-control" placeholder="Amount For">
-									</div>
-								  </div>
-								</div>
+<?php 
+include 'header.php';
+?>
+<!-- Left Sidebar End -->
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="dashboard.php">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Announcement Entry</li>
+    </ol>
+    <!-- DataTables Example -->
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-table"></i> Announcement Entry Form
+		</div>
+        <div class="card-body">
+            <!--here your code will go-->
+            <div class="form-group">
+                <form action="" method="post" name="add_name" id="receive_entry_form" enctype="multipart/form-data" onsubmit="showFormIsProcessing('receive_entry_form');">
+					<div class="row" id="div1" style="">
+						<div class="col-md-3">
+							<div class="form-group">
+							  <label>Code</label>
+								<input type="text" name="code" class="form-control" value="<?php echo getDefaultCategoryCode('announcement_master', 'code', '03d', '001', 'AN-') ?>" readonly>
 							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
-								<input type="submit" name="announcement_submit" value="SAVE ANNOUNCEMENT" class="btn btn-rounded btn-primary btn-outline" />
-							</div>  
-						</form>
-					  </div>
-					  <!-- /.box -->			
-				</div>  
-		    </div>
-		</section>
-		<!-- /.content -->
-	  </div>
-  </div>
-  <!-- /.content-wrapper -->
-  <!-- /.content-wrapper -->
-  
-  <?php include('partial/footer.php'); ?>
-</body>
-</html>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+							  <label>Date</label>
+								<input type="date" name="date" class="form-control" value="">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+							  <label>Amount</label>
+							  <input name="amount" type="text" class="form-control" placeholder="Amount">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+							  <label>Amount For</label>
+							  <input name="amount_for" type="text" class="form-control" placeholder="Amount For">
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="submit" name="announcement_submit" value="SAVE INFO" class="btn btn-primary btn-block" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<table id="dataTable" class="table table-bordered table-striped table-hover">
+								<thead>
+									<tr>
+										<th>Code</th>
+										<th>Amount</th>
+										<th>Amount For</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+								<?php
+                                    $projectsData = getTableDataByTableName('announcement_master');
+                                    ;
+                                    if (isset($projectsData) && !empty($projectsData)) {
+                                        foreach ($projectsData as $data) {
+                                            ?>
+									<tr>
+										<td><?php echo $data['code']; ?></td>
+										<td><?php echo $data['amount']; ?></td>
+										<td><?php echo $data['amount_for']; ?></td>
+										<td>
+											<a href="#"><i class="fas fa-edit text-success"></i></a>
+											<a href="#"><i class="fa fa-trash text-danger"></i></a>
+										</td>
+									</tr>
+									<?php
+                                        }
+                                    }
+                                    ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+                </form>
+            </div>
+            <!--here your code will go-->
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+<?php include 'footer.php' ?>
