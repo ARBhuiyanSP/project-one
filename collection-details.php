@@ -46,7 +46,7 @@ $id=$_GET['id']; ?>
 						<div class="row">
 							<div class="col-sm-6">	
 								<p>
-								<img src="images/Saif_Engineering_Logo_165X72.png" height="100px;"/></p></div>
+								<img src="images/Saif_Engineering_Logo_black165X72.png" height="100px;"/></p></div>
 							<div class="col-sm-6">
 								<table class="table table-bordered">
 									<tr>

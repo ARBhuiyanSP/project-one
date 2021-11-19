@@ -21,7 +21,7 @@ include 'includes/login_process.php';
         <div class="container">
             <div class="card card-login mx-auto mt-5">
                 <div class="card-header" style="text-align: center;">
-                    <img src="images/Saif_Engineering_Logo_165X72.png" />
+                    <img src="images/Saif_Engineering_Logo_black165X72.png" />
                 </div>
                 <div class="card-body">
                     <form id="login_form" name="login_form" method="post">
