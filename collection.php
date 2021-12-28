@@ -54,7 +54,7 @@ include 'header.php';
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="submit" name="collection_submit" value="SAVE INFO" class="btn btn-primary btn-block" />
+								<input type="submit" name="collection_submit" value="NEXT" class="btn btn-primary btn-block" />
 							</div>
 						</div>
 					</div>

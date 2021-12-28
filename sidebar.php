@@ -201,6 +201,11 @@
 
 	
 	<li class="nav-item">
+        <a class="nav-link" href="collection_report.php">
+            <i class="fa fa-registered" aria-hidden="true" style="color: #212529;"></i>
+            <span>Collection Reports</span></a>
+    </li>
+	<li class="nav-item">
         <a class="nav-link" href="materialinfo_report.php">
             <i class="fa fa-registered" aria-hidden="true" style="color: #212529;"></i>
             <span>Material List</span></a>
