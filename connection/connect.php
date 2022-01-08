@@ -5,8 +5,8 @@
 global $conn;
 $servername = "localhost";
 $username   = "root";
-$password   = "ms@034571";
-$dbname     = "inventory_module";
+$password   = "";
+$dbname     = "project_one";
 
 // Create connection
 $conn       = new mysqli($servername, $username, $password, $dbname);
