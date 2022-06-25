@@ -1,6 +1,11 @@
 <?php 
 include 'header.php';
 ?>
+<style>
+.table th, .table td{
+	padding:5px;
+}
+</style>
 <!-- Left Sidebar End -->
 <div class="container-fluid">
     <!-- Breadcrumbs-->
@@ -69,15 +74,16 @@ include 'header.php';
 							</div>
 						</div>
 					</div>
+                </form>
 					<div class="row">
 						<div class="col-xs-12">
 							<table id="dataTable" class="table table-bordered table-striped table-hover">
 								<thead>
 									<tr>
-										<th>Member ID</th>
 										<th>Name</th>
 										<th>Address</th>
 										<th>Phone</th>
+										<th>Photo</th>
 										<th>Action</th>
 									</tr>
 								</thead>
@@ -89,24 +95,21 @@ include 'header.php';
                                         foreach ($projectsData as $data) {
                                             ?>
 									<tr>
-										<td><?php echo $data['member_id']; ?></td>
 										<td><?php echo $data['name']; ?></td>
 										<td><?php echo $data['address']; ?></td>
 										<td><?php echo $data['phone']; ?></td>
+										<td><img src="flats_photo/<?php echo $data['photo']; ?>" height="30px;" /></td>
 										<td>
-											<a href="#"><i class="fas fa-edit text-success"></i></a>
-											<a href="#"><i class="fa fa-trash text-danger"></i></a>
+											<button class="btn btn-success" onclick="window.location.href='member-details.php?id=<?php echo $data['id']; ?>'"><i class="fas fa-eye"></i> View Details</button>
+											<button class="btn btn-primary" onclick="window.location.href='#'"><i class="fas fa-edit"></i> Edit</button>
+											<a href="#"><button class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button></a>
 										</td>
 									</tr>
-									<?php
-                                        }
-                                    }
-                                    ?>
+										<?php } } ?>
 								</tbody>
 							</table>
 						</div>
 					</div>
-                </form>
             </div>
             <!--here your code will go-->
         </div>

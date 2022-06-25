@@ -29,7 +29,17 @@
 								?>
 							<tr class="edit_tr" style="background-color:#212529;color:#ffffff;">
 								<th><?php echo $row['date'] ?></th>
-								<th><?php echo $row['member_id'] ?></th>
+								<th>
+									<?php 
+									$member_id = $row['member_id'];
+									$sqlname	=	"SELECT * FROM `members` WHERE `member_id`='$member_id'";
+									$resultname = mysqli_query($conn, $sqlname);
+									$rowname=mysqli_fetch_array($resultname); 
+									echo $rowname['name'];
+									?>
+								</th>
+								
+								
 								<th><?php echo $row['deposit_amount'] ?></th>
 								<th>
 									<a href="#" class="btn btn-success"><i class="fa fa-edit"></i></a>

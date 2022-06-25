@@ -117,7 +117,16 @@ if(isset($_GET['submit'])){
 										
 							<tr>
 								<td><?php echo $row['date']; ?></td>
-								<td><?php echo $row['balance_ref']; ?></td>
+								<td>
+								<?php 
+								$balance_ref = $row['balance_ref'];
+								$sqlref	=	"SELECT * FROM `announcement_master` WHERE `code`='$balance_ref'";
+								$resultref = mysqli_query($conn, $sqlref);
+								$rowref=mysqli_fetch_array($resultref);
+								echo $rowref['amount_for'];
+								?>
+								
+								</td>
 								<td><?php echo $row['deposit_amount']; ?></td>
 							</tr>
 						<?php } ?>

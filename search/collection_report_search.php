@@ -89,7 +89,19 @@ if(isset($_GET['submit'])){
 										
 							<tr>
 								<td><?php echo $row['date']; ?></td>
-								<td><?php echo $row['balance_ref']; ?></td>
+								<td>
+								<?php 
+								$balance_ref = $row['balance_ref'];
+								$sqlref	=	"SELECT * FROM `announcement_master` WHERE `code`='$balance_ref'";
+								$resultref = mysqli_query($conn, $sqlref);
+								$rowref=mysqli_fetch_array($resultref);
+								echo $rowref['amount_for'];
+								?>
+								
+								</td>
+								
+								
+								
 								<?php
 									$member_id = $row['member_id'];
 									$sqlname	=	"SELECT * FROM `members` WHERE `member_id`='$member_id'";
