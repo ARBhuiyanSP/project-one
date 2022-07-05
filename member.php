@@ -85,7 +85,7 @@ include 'header.php';
 										<th>Address</th>
 										<th>Phone</th>
 										<th>Photo</th>
-										<th>Action</th>
+										<th width="40%">Action</th>
 									</tr>
 								</thead>
 								<tbody>
