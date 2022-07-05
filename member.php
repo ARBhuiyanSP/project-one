@@ -2,9 +2,10 @@
 include 'header.php';
 ?>
 <style>
-.table th, .table td{
-	padding:5px;
-}
+.table th, .table td
+	{
+		padding:5px;
+	}
 </style>
 <!-- Left Sidebar End -->
 <div class="container-fluid">

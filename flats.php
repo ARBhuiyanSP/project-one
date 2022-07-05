@@ -30,7 +30,7 @@ include 'header.php';
 						<div class="col-md-3">
 							<div class="form-group">
 							  <label>Name</label>
-							  <input name="name" type="text" class="form-control" placeholder="Name">
+							  <input name="name" type="text" class="form-control" placeholder="Name" required >
 							</div>
 						</div>
 						<div class="col-md-3">
@@ -67,27 +67,28 @@ include 'header.php';
 								<thead>
 									<tr>
 										<th>Name</th>
-										<th>Action</th>
+										<th>Photo</th>
+										<th width="40%">Action</th>
 									</tr>
 								</thead>
 								<tbody>
-								<?php
-                                    $projectsData = getTableDataByTableName('flats');
-                                    ;
-                                    if (isset($projectsData) && !empty($projectsData)) {
-                                        foreach ($projectsData as $data) {
-                                            ?>
+									<?php
+										$projectsData = getTableDataByTableName('flats');
+										if (isset($projectsData) && !empty($projectsData)) {
+											foreach ($projectsData as $data) {
+									?>
 									<tr>
 										<td><?php echo $data['name']; ?></td>
+										<td><img src="flats_photo/<?php echo $data['photo']; ?>" height="30px;" /></td>
 										<td>
-											<a href="#"><i class="fas fa-edit text-success"></i></a>
-											<a href="#"><i class="fa fa-trash text-danger"></i></a>
+											<button class="btn btn-success" onclick="window.location.href='flat-details.php?id=<?php echo $data['id']; ?>'"><i class="fas fa-eye"></i> View Details</button>
+											
+											<button class="btn btn-primary" onclick="window.location.href='#'"><i class="fas fa-edit"></i> Edit</button>
+											
+											<a href="#"><button class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button></a>
 										</td>
 									</tr>
-									<?php
-                                        }
-                                    }
-                                    ?>
+									<?php } } ?>
 								</tbody>
 							</table>
 						</div>
