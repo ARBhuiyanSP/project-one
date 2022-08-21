@@ -1,36 +1,20 @@
 <?php
 /*******************************************************************************
  * The following code will
- * Insert Building Info at buildings table
+ * Insert Project Info at projects table
  */
 if (isset($_POST['building_submit']) && !empty($_POST['building_submit'])) {
-		// insert data into buildings table
-        $name			= $_POST['name'];
-        $address		= $_POST['address'];    
-        $no_of_floor	= $_POST['no_of_floor'];     
-        $no_of_unit		= $_POST['no_of_unit'];     
-               
-        $query = "INSERT INTO `buildings` (`name`,`address`,`status`) VALUES ('$name','$address','active')";
-        $conn->query($query);
-		$last_inserted_buliding_id=$conn->insert_id;
-	
-			// insert data into floor table
-			$limit = number_to_alphabet($no_of_floor);
-			for($x = "A", $limit++; $x != $limit; $x++) {
-				$name = $x;
-				$query2 = "INSERT INTO `floors`(`building_id`,`name`) VALUES ('$last_inserted_buliding_id','$name')";
-				$conn->query($query2);
-				$last_inserted_floor_id=$conn->insert_id;
-					// insert data into falt_units table
-					$unit	=	$no_of_unit + 1;
-					for ($i = 1; $i < $unit; $i++) {
-						$name = $x.'-'.$i;
-						// etc.
-						$query2 = "INSERT INTO `flat_units`(`floor_id`,`building_id`,`name`,`status`) VALUES ('$last_inserted_floor_id','$last_inserted_buliding_id','$name','ForSale')";
-						$conn->query($query2);
-					}
 
-			}
+        
+        /*
+         *  Insert Data Into inv_receivedetail Table:
+        */ 
+        $building_id	= $_POST['building_id'];
+        $building_type	= $_POST['building_type'];    
+        $package_id		= $_POST['package_id'];     
+               
+        $query = "INSERT INTO `buildings` (`building_id`,`building_type`,`package_id`) VALUES ('$building_id','$building_type','$package_id')";
+        $conn->query($query);
         
 		$_SESSION['success']    =   "Building Entry process have been successfully completed.";
 		header("location: building_entry.php");
@@ -120,85 +104,4 @@ if(isset($_POST['package_update_submit']) && !empty($_POST['package_update_submi
     exit();
 }
 
-
-
-/* FFlat-units process*/
-	// initialize variables
-	$building_id = "";
-	$name = "";
-	$id = 0;
-	$update = false;
-	if (isset($_POST['save'])) {
-		$building_id = $_POST['building_id'];
-		$name = $_POST['name'];
-
-		mysqli_query($conn, "INSERT INTO flat_units (building_id,name) VALUES ('$building_id','$name')"); 
-		$_SESSION['message'] = "Nmae saved"; 
-		//header('location: flats.php');
-	}
-	
-	if (isset($_POST['flat_update'])) {
-	$id = $_POST['id'];
-	$building_id = $_POST['building_id'];
-	$name = $_POST['name'];
-
-	mysqli_query($conn, "UPDATE flat_units SET building_id='$building_id', name='$name' WHERE id=$id");
-	$_SESSION['message'] = "Name updated!"; 
-	//header('location: flats.php');
-}
-
-if (isset($_GET['del'])) {
-	$id = $_GET['del'];
-	mysqli_query($conn, "DELETE FROM flat_units WHERE id=$id");
-	$_SESSION['message'] = "Name deleted!"; 
-	//header('location: flats.php');
-}
-
-	if (isset($_GET['edit'])) {
-		$id = $_GET['edit'];
-		$update = true;
-		$record = mysqli_query($conn, "SELECT * FROM `flat_units` WHERE `id`=$id");
-		$count = $record->num_rows;
-		if ($count == 1 ) {
-			$n = mysqli_fetch_array($record);
-			$building_id = $n['building_id'];
-			$name = $n['name'];
-		}
-	}
-$results = mysqli_query($conn, "SELECT * FROM flat_units");
-
-
-/*Flat sale Process*/
-if (isset($_POST['sale_submit']) && !empty($_POST['sale_submit'])) {
-		// insert data into buildings table
-        $owner_id		= $_POST['owner_id'];
-        $building_id	= $_POST['building_id'];
-        $floor_id		= $_POST['floor_id'];
-        $flat_id		= $_POST['flat_id'];
-        $ownership_date		= $_POST['ownership_date'];
-        $payment_type		= $_POST['payment_type'];
-        $price				= $_POST['price'];
-        $down_payment		= $_POST['down_payment'];
-        $due_payment		= $_POST['due_payment'];
-        $instalment_qty		= $_POST['instalment_qty'];
-        $instalment_amount	= $_POST['instalment_amount'];
-		$flat_status	= 'SoldOut';
-               
-        $query = "INSERT INTO `flat_owners` (`flat_id`,`owner_id`,`ownership_date`,`payment_type`,`instalment_amount`) VALUES ('$flat_id','$owner_id','$ownership_date','$payment_type','$instalment_amount')";
-        $conn->query($query);
-		
-		
-		$queryupdate   = "UPDATE `flat_units` SET `status`='$flat_status',`price`='$price',`down_payment`='$down_payment',`instalment_qty`='$instalment_qty',`instalment_amount`='$instalment_amount' WHERE `id`='$flat_id'";
-		$resultupdate = $conn->query($queryupdate);
-		
-		$querybalance = "INSERT INTO `balance_sheet`(`date`,`balance_ref`,`member_id`,`credit_amount`,`deposit_amount`,`type`) VALUES ('$ownership_date','down_payment','$owner_id','$down_payment','0','credit')";
-		$conn->query($querybalance);
-		
-		$querybalance2 = "INSERT INTO `balance_sheet`(`date`,`balance_ref`,`member_id`,`credit_amount`,`deposit_amount`,`type`) VALUES ('$ownership_date','down_payment','$owner_id','0','$down_payment','deposit')";
-		$conn->query($querybalance2);
-        
-		$_SESSION['success']    =   "Building Entry process have been successfully completed.";
-		header("location: flats.php");
-		exit();
-}
 ?>

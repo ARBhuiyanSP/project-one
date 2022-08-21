@@ -1,6 +1,24 @@
 <?php 
 include 'header.php';
 ?>
+<?php  
+
+?>
+<style>
+.table th, .table td{
+	padding: 5px !important;
+}
+.msg {
+    margin: 30px auto; 
+    padding: 10px; 
+    border-radius: 5px; 
+    color: #3c763d; 
+    background: #dff0d8; 
+    border: 1px solid #3c763d;
+    width: 50%;
+    text-align: center;
+}
+</style>
 <!-- Left Sidebar End -->
 <div class="container-fluid">
     <!-- Breadcrumbs-->
@@ -10,95 +28,115 @@ include 'header.php';
         </li>
         <li class="breadcrumb-item active">Flat Entry</li>
     </ol>
-    <!-- DataTables Example -->
-    <div class="card mb-3">
-        <div class="card-header">
-            <i class="fas fa-table"></i> Flat Entry Form
+	<div class="row">
+		<div class="col-md-3">
+			 <div class="card mb-3">
+				<div class="card-header">
+					<i class="fas fa-table"></i> Flat Entry Form
+				</div>
+				<div class="card-body">
+					<form method="post" action="" >
+						<div class="form-group">
+							<label>Buliding</label>
+							<select class="form-control" id="building_id" name="building_id" >
+								<?php
+								$projectsData = getTableDataByTableName('buildings');
+								;
+								if (isset($projectsData) && !empty($projectsData)) {
+									foreach ($projectsData as $data) {
+										?>
+										<option value="<?php echo $data['id']; ?>" <?php if (isset($building_id) && $building_id == $data['id']) {
+									echo 'selected';
+								} ?>><?php echo $data['name']; ?></option>
+										<?php
+									}
+								}
+								?>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Name</label>
+							<input class="form-control" type="text" name="name" value="<?php echo $name; ?>">
+							<input type="hidden" name="id" value="<?php echo $id; ?>">
+						</div>
+						<div class="form-group">
+							<?php if ($update == true): ?>
+								<button class="btn btn-success btn-block" type="submit" name="flat_update">update</button>
+							<?php else: ?>
+								<button class="btn btn-info btn-block" type="submit" name="save" >Save</button>
+							<?php endif ?>
+						</div>
+					</form>
+					<?php if (isset($_SESSION['message'])): ?>
+						<div class="msg">
+							<?php 
+								echo $_SESSION['message']; 
+								unset($_SESSION['message']);
+							?>
+						</div>
+					<?php endif ?>
+				</div>
+			 </div>
 		</div>
-        <div class="card-body">
-            <!--here your code will go-->
-            <div class="form-group">
-                <form action="" method="post" name="add_name" id="receive_entry_form" enctype="multipart/form-data" onsubmit="showFormIsProcessing('receive_entry_form');">
-					<div class="row" id="div1" style="">
-						<div class="col-md-3">
-							<div class="form-group">
-								<label>Code</label>
-								<?php $prefix= 'F-'; ?>
-								<input type="text" name="code" class="form-control" value="<?php echo getDefaultCategoryCode('flats', 'code', '03d', '001', $prefix) ?>" readonly>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="form-group">
-							  <label>Name</label>
-							  <input name="name" type="text" class="form-control" placeholder="Name" required >
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="form-group">
-							  <label>Status</label>
-							  <select name="status" class="form-control">
-								<option value="for_sale">For Sell</option>
-								<option value="sold_out">Sold Out</option>
-							  </select>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="form-group">
-							  <label>Select Photo</label>
-							  <input type="file" name="flatfileToUpload" id="picture">
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<label>Flat's Details</label>
-								<textarea name="details" rows="3" class="form-control" placeholder="Flat's Details"></textarea>
-							</div>
-						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="submit" name="flat_submit" value="SAVE INFO" class="btn btn-primary btn-block" />
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<table id="dataTable" class="table table-bordered table-striped table-hover">
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Photo</th>
-										<th width="40%">Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php
-										$projectsData = getTableDataByTableName('flats');
-										if (isset($projectsData) && !empty($projectsData)) {
-											foreach ($projectsData as $data) {
+		<div class="col-md-9">
+			<div class="card mb-3">
+				<div class="card-header">
+					<i class="fas fa-table"></i> Flat List
+				</div>
+				<div class="card-body">
+					
+					<table id="dataTable" class="table table-bordered table-striped table-hover">
+						<thead>
+							<tr>
+								<th>Building</th>
+								<th>Floor</th>
+								<th>Unit/Flat Name</th>
+								<th>Status</th>
+								<th width="25%">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+								$projectsData = getTableDataByTableName('flat_units');
+								if (isset($projectsData) && !empty($projectsData)) {
+									foreach ($projectsData as $data) {
+							
+							
+							?>
+							<tr style="background-color:<?php if($data['status'] == 'ForSale'){echo '#72c2aa';}else{echo '#b89069';} ?>">
+								<td>
+									<?php 
+										$dataresult =   getDataRowByTableAndId('buildings', $data['building_id']);
+										echo (isset($dataresult) && !empty($dataresult) ? $dataresult->name : '');
 									?>
-									<tr>
-										<td><?php echo $data['name']; ?></td>
-										<td><img src="flats_photo/<?php echo $data['photo']; ?>" height="30px;" /></td>
-										<td>
-											<button class="btn btn-success" onclick="window.location.href='flat-details.php?id=<?php echo $data['id']; ?>'"><i class="fas fa-eye"></i> View Details</button>
-											
-											<button class="btn btn-primary" onclick="window.location.href='#'"><i class="fas fa-edit"></i> Edit</button>
-											
-											<a href="#"><button class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button></a>
-										</td>
-									</tr>
-									<?php } } ?>
-								</tbody>
-							</table>
-						</div>
-					</div>
-                </form>
-            </div>
-            <!--here your code will go-->
-        </div>
-    </div>
-
+								</td>
+								<td>
+									<?php 
+										$dataresult =   getDataRowByTableAndId('floors', $data['floor_id']);
+										echo (isset($dataresult) && !empty($dataresult) ? $dataresult->name : '');
+									?>
+								</td>
+								<td><?php echo $data['name']; ?></td>
+								<td><?php echo $data['status']; ?></td>
+								<td>
+									<button class="btn btn-sm btn-info" onclick="window.location.href='flat-details.php?id=<?php echo $data['id']; ?>'"><i class="fas fa-eye"></i></button>
+									
+									<a href="flats.php?edit=<?php echo $data['id']; ?>"><button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button></a>
+									
+									<?php if($data['status'] == 'ForSale'){ ?>
+										<button class="btn btn-sm btn-success" title="Sale" onclick="window.location.href='flat-sale.php?id=<?php echo $data['id']; ?>'"><i class="fas fa-funnel-dollar"></i></button>
+									<?php }?>
+									
+									<a href="flats.php?del=<?php echo $data['id']; ?>"><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></a>
+								</td>
+							</tr>
+							<?php } } ?>
+						</tbody>
+					</table>
+				</div>
+			 </div>
+		</div>
+	</div>
 </div>
 <!-- /.container-fluid -->
 <?php include 'footer.php' ?>

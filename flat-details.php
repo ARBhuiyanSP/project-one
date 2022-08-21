@@ -22,14 +22,13 @@ $id=$_GET['id'];
         <div class="card-body">
             <!--here your code will go-->
 			<?php
-				$sql = "select * from `flats` where `id`='$id'";
+				$sql = "select * from `flat_units` where `id`='$id'";
 				$result = mysqli_query($conn, $sql);
 				$row = mysqli_fetch_array($result);
 			?>
 			<center>
 				<img src="flats_photo/<?php echo $row['photo']; ?>" height="100px;"/>
 				</br>Name : <?php echo $row['name']; ?>
-				</br>Address : <?php echo $row['details']; ?>
 			</center>
             <!--here your code will go-->
         </div>

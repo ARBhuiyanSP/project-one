@@ -9,13 +9,13 @@
 if (isset($_POST['announcement_submit']) && !empty($_POST['announcement_submit'])) {
 			
 		// Store Data:
-	$sql = "select * FROM `members`";
+	$sql = "select * FROM `flat_owners` WHERE `payment_type`='Instalment'";
 	$result = mysqli_query($conn, $sql);
 	while ($row = mysqli_fetch_array($result)) {
 		$code 				= $_POST['code'];
-		$member_id 			= $row['member_id'];
+		$member_id 			= $row['owner_id'];
 		$date 				= $_POST['date'];
-		$amount 			= $_POST['amount'];
+		$amount 			= $row['instalment_amount'];
 		$amount_for 		= $_POST['amount_for'];
 		$status 			= 'unpaid';
 		$created_by			= 'User';

@@ -32,12 +32,12 @@ include 'header.php';
 								<input type="date" name="date" class="form-control" value="">
 							</div>
 						</div>
-						<div class="col-md-3">
+						<!-- <div class="col-md-3">
 							<div class="form-group">
 							  <label>Amount</label>
 							  <input name="amount" type="text" class="form-control" placeholder="Amount">
 							</div>
-						</div>
+						</div> -->
 						<div class="col-md-3">
 							<div class="form-group">
 							  <label>Amount For</label>
